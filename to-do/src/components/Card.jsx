@@ -67,6 +67,7 @@ function Card() {
               value={currentTask}
               onChange={(e) => setCurrentTask(e.target.value)}
               onKeyPress={handleKeyPress}
+              placeholder="Write here..."
             />
           </label>
           {editIndex !== null ? (

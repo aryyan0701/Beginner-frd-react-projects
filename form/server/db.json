@@ -1,0 +1,23 @@
+[
+  {
+    "firstName": "Aryan",
+    "lastName": "kadam",
+    "email": "aryankadam071@gmail.com",
+    "password": "aryan12",
+    "cnfpassword": "aryan12"
+  },
+  {
+    "firstName": "soham",
+    "lastName": "lalit",
+    "email": "soham@gmail.com",
+    "password": "soham69",
+    "cnfpassword": "soham"
+  },
+  {
+    "firstName": "Aryan",
+    "lastName": "kadam",
+    "email": "aryankadam@gmail.com",
+    "password": "aryan69",
+    "cnfpassword": "aryan69"
+  }
+]

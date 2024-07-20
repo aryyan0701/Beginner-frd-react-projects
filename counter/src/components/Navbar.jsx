@@ -1,5 +1,6 @@
 import React from "react";
 import { FaBars } from "react-icons/fa6";
+import { Link } from "react-router-dom";
 
 function Navbar() {
   return (
@@ -10,9 +11,12 @@ function Navbar() {
             <FaBars className=" mr-2" />
           </label>
           <h2 className="text-xl text-black dark:text-white font-semibold">
-            Counter
+           <Link to='/'>Counter</Link>
           </h2>
         </div>
+        <h2 className="text-xl text-black dark:text-white font-semibold">
+        <Link to='/model'>Model</Link>
+          </h2>
  
       </nav>
 

@@ -14,7 +14,6 @@ function Search() {
 
   const api = import.meta.env.VITE_API_KEY;
 
-
   const handleFetching = async () => {
     try {
       setLoading(true);

@@ -47,7 +47,7 @@ To get started with the project, follow these steps:
    ```
    npm run dev
    ```
-5. Open your browser and visit `http://localhost:5137` to view the application.
+5. Open your browser and visit `http://localhost:5137` to view the application
 
 
 ## Usage

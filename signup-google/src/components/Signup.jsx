@@ -1,6 +1,6 @@
 import React from "react";
 import { FaGoogle, FaGithub } from "react-icons/fa";
-import { auth, provider, db } from "../firebase/firebase";
+import { auth, githubprovider, googleprovider, db } from "../firebase/firebase";
 import { signInWithPopup } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
 import { toast } from "react-toastify";
@@ -11,7 +11,7 @@ function Signup() {
 
   const signUpWithGoogle = async () => {
     try {
-      const result = await signInWithPopup(auth, provider);
+      const result = await signInWithPopup(auth, googleprovider);
       const user = result.user;
       // console.log(user);
 
@@ -29,6 +29,28 @@ function Signup() {
     } catch (error) {
       toast.error('Error signing up with Google');
       console.error("Error to signup with google", error);
+    }
+  };
+
+  const signupWithGithub = async()=>{
+    try {
+      const result = await signInWithPopup(auth, githubprovider);
+      const user = result.user;
+
+      await setDoc(doc(db, "users", user.uid), {
+        uid: user.uid,
+        name: user.displayName,
+        email: user.email,
+        profilePicture: user.photoURL,
+        createdAt: new Date()
+      })
+
+      toast.success('User signed up successfully!');
+      navigate('/dashboard');
+
+    } catch (error) {
+      toast.error('Error signing up with Github');
+      console.error("Error to signup with github", error);
     }
   };
 
@@ -115,7 +137,9 @@ function Signup() {
                   <FaGoogle />
                 </h2>
               </div>
-              <div className="h-10 rounded-lg bg-gray-100 text-black text-xl justify-center items-center flex">
+              <div 
+              onClick={signupWithGithub} 
+              className="h-10 rounded-lg bg-gray-100 text-black text-xl justify-center items-center flex cursor-pointer">
                 <h2>
                   <FaGithub />
                 </h2>

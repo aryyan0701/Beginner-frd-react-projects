@@ -1,7 +1,7 @@
 import React from 'react';
 import { FaGoogle, FaGithub } from "react-icons/fa";
 import { signInWithPopup } from "firebase/auth";
-import { auth, provider, db } from '../firebase/firebase'; 
+import { auth, googleprovider, githubprovider, db } from '../firebase/firebase'; 
 import { doc, getDoc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -11,7 +11,7 @@ function Login() {
 
   const loginWithGoogle = async () => {
     try {
-      const result = await signInWithPopup(auth, provider);
+      const result = await signInWithPopup(auth, googleprovider);
       const user = result.user;
 
       const userDoc = await getDoc(doc(db, 'users', user.uid));
@@ -26,6 +26,26 @@ function Login() {
     } catch (error) {
       toast.error('Error logging in with Google');
       console.error('Error logging in with Google', error);
+    }
+  };
+
+  const loginWithGithub = async()=>{
+    try {
+      const result = await signInWithPopup(auth, githubprovider);
+      const user = result.user;
+
+      const userDoc = await getDoc(doc(db, "users", user.uid));
+
+      if (userDoc.exists()) {
+        toast.success("Logged in successfully!");
+        navigate('/dashboard');
+      } else {
+        toast.error('No account found. Please sign up first.');
+        navigate('/signup');
+      }
+    } catch (error) {
+      toast.error('Error logging in with Github');
+      console.error('Error logging in with Github', error);
     }
   };
 
@@ -97,7 +117,7 @@ function Login() {
                   <FaGoogle />
                 </h2>
               </div>
-              <div className="h-10 rounded-lg bg-gray-100 text-black text-xl justify-center items-center flex">
+              <div onClick={loginWithGithub} className="h-10 rounded-lg bg-gray-100 text-black text-xl justify-center items-center flex">
                 <h2>
                   <FaGithub />
                 </h2>

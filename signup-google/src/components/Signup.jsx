@@ -1,22 +1,35 @@
 import React from "react";
-import { FaGoogle } from "react-icons/fa";
-import { FaGithub } from "react-icons/fa6";
-import { auth, provider } from "../firebase/firebase";
+import { FaGoogle, FaGithub } from "react-icons/fa";
+import { auth, provider, db } from "../firebase/firebase";
 import { signInWithPopup } from "firebase/auth";
-
+import { doc, setDoc } from "firebase/firestore";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 function Signup() {
-  
-  const signUpWithGoogle = () => {
-    signInWithPopup(auth, provider)
-      .then((result) => {
-        const user = result.user;
-        console.log(user);
-        // You can also create a user document in your Firestore database here if needed
-      })
-      .catch((error) => {
-        console.error(error);
+  const navigate = useNavigate();
+
+  const signUpWithGoogle = async () => {
+    try {
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
+      // console.log(user);
+
+      // Create user document in Firestore
+      await setDoc(doc(db, "users", user.uid), {
+        uid: user.uid,
+        name: user.displayName,
+        email: user.email,
+        profilePicture: user.photoURL,
+        createdAt: new Date()
       });
+
+      toast.success('User signed up successfully!');
+      navigate('/dashboard');
+    } catch (error) {
+      toast.error('Error signing up with Google');
+      console.error("Error to signup with google", error);
+    }
   };
 
   return (
@@ -35,16 +48,14 @@ function Signup() {
           <form
             action="#"
             className="mb-0 mt-6 space-y-4 rounded-lg p-4 shadow-lg sm:p-6 lg:p-8 bg-slate-200"
+            onSubmit={(e) => e.preventDefault()}
           >
-            <p className="text-center text-lg font-medium">
-              Sign up now
-            </p>
+            <p className="text-center text-lg font-medium">Sign up now</p>
 
             <div>
               <label htmlFor="name" className="sr-only">
                 Name
               </label>
-
               <div className="relative">
                 <input
                   type="name"
@@ -58,14 +69,12 @@ function Signup() {
               <label htmlFor="email" className="sr-only">
                 Email
               </label>
-
               <div className="relative">
                 <input
                   type="email"
                   className="w-full rounded-lg border-gray-200 p-4 pe-12 text-sm shadow-sm"
                   placeholder="Enter email"
                 />
-
               </div>
             </div>
 
@@ -73,7 +82,6 @@ function Signup() {
               <label htmlFor="password" className="sr-only">
                 Password
               </label>
-
               <div className="relative">
                 <input
                   type="password"
@@ -91,7 +99,7 @@ function Signup() {
             </button>
 
             <p className="text-center text-sm text-gray-500">
-              Don't have an account?
+              Already have an account?
               <a className="underline" href="#">
                 {" "}
                 Sign in
@@ -103,10 +111,14 @@ function Signup() {
                 onClick={signUpWithGoogle}
                 className="h-10 rounded-lg bg-gray-100 text-black text-xl justify-center items-center flex cursor-pointer"
               >
-                <h2><FaGoogle /></h2>
+                <h2>
+                  <FaGoogle />
+                </h2>
               </div>
               <div className="h-10 rounded-lg bg-gray-100 text-black text-xl justify-center items-center flex">
-                <h2><FaGithub /></h2>
+                <h2>
+                  <FaGithub />
+                </h2>
               </div>
             </div>
           </form>
